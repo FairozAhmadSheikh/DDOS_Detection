@@ -45,3 +45,9 @@ def simple_impute_numeric(df, strategy='median'):
                 val = 0
             df[col] = df[col].fillna(val)
     return df
+def encode_labels(df, label_col='Label'):
+    """Map multi-class labels to integers and return mapping."""
+    le = LabelEncoder()
+    df = df.copy()
+    df[label_col] = le.fit_transform(df[label_col].astype(str))
+    return df, le
