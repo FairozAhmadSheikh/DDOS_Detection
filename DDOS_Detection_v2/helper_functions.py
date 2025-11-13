@@ -33,3 +33,15 @@ def basic_cleaning(df, drop_cols=None):
     # replace inf/-inf and convert objects that look numeric
     df = df.replace([np.inf, -np.inf], np.nan)
     return df
+
+def simple_impute_numeric(df, strategy='median'):
+    for col in df.select_dtypes(include=[np.number]).columns:
+        if df[col].isna().any():
+            if strategy == 'median':
+                val = df[col].median()
+            elif strategy == 'mean':
+                val = df[col].mean()
+            else:
+                val = 0
+            df[col] = df[col].fillna(val)
+    return df
