@@ -15,3 +15,10 @@ def load_csvs_glob(paths):
         dfs.append(pd.read_csv(p))
     df = pd.concat(dfs, ignore_index=True)
     return df
+
+def inspect_df(df, n=5):
+    print("Shape:", df.shape)
+    print("\nColumns:", df.columns.tolist())
+    print("\nMissing values per column (top 20):")
+    print(df.isna().sum().sort_values(ascending=False).head(20))
+    display(df.head(n))
