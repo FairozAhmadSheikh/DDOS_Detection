@@ -21,4 +21,15 @@ def inspect_df(df, n=5):
     print("\nColumns:", df.columns.tolist())
     print("\nMissing values per column (top 20):")
     print(df.isna().sum().sort_values(ascending=False).head(20))
-    display(df.head(n))
+    display(df.head(n)) # print in vs code
+    
+def basic_cleaning(df, drop_cols=None):
+    """Strip column names, drop specified cols, drop duplicates."""
+    df = df.copy()
+    df.columns = df.columns.str.strip()
+    if drop_cols:
+        df = df.drop(columns=[c for c in drop_cols if c in df.columns], errors='ignore')
+    df = df.drop_duplicates()
+    # replace inf/-inf and convert objects that look numeric
+    df = df.replace([np.inf, -np.inf], np.nan)
+    return df
