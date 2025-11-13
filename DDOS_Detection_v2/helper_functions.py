@@ -51,3 +51,11 @@ def encode_labels(df, label_col='Label'):
     df = df.copy()
     df[label_col] = le.fit_transform(df[label_col].astype(str))
     return df, le
+
+def scale_features(X_train, X_val=None):
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    if X_val is not None:
+        X_val_scaled = scaler.transform(X_val)
+        return X_train_scaled, X_val_scaled, scaler
+    return X_train_scaled, scaler
