@@ -107,3 +107,6 @@ def plot_roc_pr(y_true, y_score, pos_label=1):
     plt.legend()
     plt.tight_layout()
     plt.show()
+
+def save_scaler(scaler, path):
+    joblib.dump(scaler, path)
