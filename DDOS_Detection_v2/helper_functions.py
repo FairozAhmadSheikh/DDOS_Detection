@@ -59,3 +59,14 @@ def scale_features(X_train, X_val=None):
         X_val_scaled = scaler.transform(X_val)
         return X_train_scaled, X_val_scaled, scaler
     return X_train_scaled, scaler
+
+def plot_class_balance(df, label_col='Label'):
+    counts = df[label_col].value_counts()
+    plt.figure(figsize=(6,4))
+    sns.barplot(x=counts.index.astype(str), y=counts.values)
+    plt.title("Class distribution")
+    plt.ylabel("Count")
+    plt.xlabel("Label")
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
