@@ -110,3 +110,7 @@ def plot_roc_pr(y_true, y_score, pos_label=1):
 
 def save_scaler(scaler, path):
     joblib.dump(scaler, path)
+
+
+def load_scaler(path):
+    return joblib.load(path)
