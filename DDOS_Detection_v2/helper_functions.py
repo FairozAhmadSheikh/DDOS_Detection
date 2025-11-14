@@ -83,3 +83,27 @@ def plot_corr_heatmap(df, numeric_only=True, top_k=40):
     plt.title("Feature correlation heatmap (subset)")
     plt.tight_layout()
     plt.show()
+
+def plot_roc_pr(y_true, y_score, pos_label=1):
+    fpr, tpr, _ = roc_curve(y_true, y_score, pos_label=pos_label)
+    roc_auc = auc(fpr, tpr)
+    prec, rec, _ = precision_recall_curve(y_true, y_score, pos_label=pos_label)
+    pr_auc = auc(rec, prec)
+
+    plt.figure(figsize=(12,5))
+    plt.subplot(1,2,1)
+    plt.plot(fpr, tpr, label=f'AUC = {roc_auc:.4f}')
+    plt.plot([0,1],[0,1],'k--')
+    plt.title("ROC Curve")
+    plt.xlabel("FPR")
+    plt.ylabel("TPR")
+    plt.legend()
+
+    plt.subplot(1,2,2)
+    plt.plot(rec, prec, label=f'PR AUC = {pr_auc:.4f}')
+    plt.title("Precision-Recall Curve")
+    plt.xlabel("Recall")
+    plt.ylabel("Precision")
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
