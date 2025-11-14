@@ -70,3 +70,16 @@ def plot_class_balance(df, label_col='Label'):
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.show()
+    
+def plot_corr_heatmap(df, numeric_only=True, top_k=40):
+    numeric = df.select_dtypes(include=[np.number])
+    if top_k and numeric.shape[1] > top_k:
+        # pick top_k features by variance to keep plot readable
+        variances = numeric.var().sort_values(ascending=False).head(top_k).index
+        numeric = numeric[variances]
+    corr = numeric.corr()
+    plt.figure(figsize=(12,10))
+    sns.heatmap(corr, cmap='RdBu_r', center=0, square=True)
+    plt.title("Feature correlation heatmap (subset)")
+    plt.tight_layout()
+    plt.show()
