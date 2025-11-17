@@ -162,3 +162,12 @@ def plot_feature_importances(importances, top_n=30, title="Feature importances")
     plt.xlabel("Importance")
     plt.tight_layout()
     plt.show()
+    
+#  IMBALANCE HANDLING 
+def apply_smote(X, y, sampling_strategy='auto', random_state=42, k_neighbors=5):
+    """
+    Return resampled X_res, y_res using SMOTE. Input X, y are arrays/dataframes.
+    """
+    sm = SMOTE(sampling_strategy=sampling_strategy, random_state=random_state, k_neighbors=k_neighbors)
+    X_res, y_res = sm.fit_resample(X, y)
+    return X_res, y_res
