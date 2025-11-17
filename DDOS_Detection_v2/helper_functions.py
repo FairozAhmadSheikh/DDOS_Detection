@@ -152,3 +152,13 @@ def select_from_tree(X, y, threshold='median', random_state=42, n_estimators=200
     selected = importances[importances >= th].index.tolist()
     selector = SelectFromModel(rf, threshold=th, prefit=True)
     return selector, importances, selected
+
+
+def plot_feature_importances(importances, top_n=30, title="Feature importances"):
+    fi = importances.sort_values(ascending=False).head(top_n)
+    plt.figure(figsize=(8, max(4, top_n*0.25)))
+    sns.barplot(x=fi.values, y=fi.index)
+    plt.title(title)
+    plt.xlabel("Importance")
+    plt.tight_layout()
+    plt.show()
