@@ -11,3 +11,8 @@ joblib
 imbalanced-learn
 scipy
 tqdm
+xgboost
+optuna         # optional — I include RandomizedSearchCV by default; Optuna is optional
+imbalanced-learn
+shap            # optional, for SHAP explanations (can be large)
+scikit-optimize # optional
