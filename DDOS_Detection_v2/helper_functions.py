@@ -121,3 +121,16 @@ def save_scaler(scaler, path):
 
 def load_scaler(path):
     return joblib.load(path)
+
+
+# FEATURE SELECTORS
+def select_kbest_mutual_info(X, y, k=30, random_state=42):
+    """
+    Select top-k features using mutual information (non-parametric, good for mixed distributions).
+    Returns fitted selector and DataFrame of scores.
+    """
+    sel = SelectKBest(score_func=mutual_info_classif, k=min(k, X.shape[1]))
+    sel.fit(X.fillna(0), y)
+    scores = pd.Series(sel.scores_, index=X.columns).sort_values(ascending=False)
+    selected = X.columns[sel.get_support()].tolist()
+    return sel, scores, selected
