@@ -171,3 +171,24 @@ def apply_smote(X, y, sampling_strategy='auto', random_state=42, k_neighbors=5):
     sm = SMOTE(sampling_strategy=sampling_strategy, random_state=random_state, k_neighbors=k_neighbors)
     X_res, y_res = sm.fit_resample(X, y)
     return X_res, y_res
+
+#  MODEL EVAL HELPERS 
+def compute_multiclass_auc(y_true, y_proba, average='macro'):
+    """
+    For multiclass predicted probabilities, compute one-vs-rest AUCs and average.
+    y_proba: array shape (n_samples, n_classes)
+    """
+    try:
+        from sklearn.preprocessing import label_binarize
+        classes = np.unique(y_true)
+        y_bin = label_binarize(y_true, classes=classes)
+        aucs = []
+        for i in range(y_proba.shape[1]):
+            try:
+                aucs.append(roc_auc_score(y_bin[:, i], y_proba[:, i]))
+            except Exception:
+                aucs.append(np.nan)
+        return pd.Series(aucs, index=[f"class_{c}" for c in classes]), np.nanmean(aucs)
+    except Exception as e:
+        print("Could not compute multiclass AUC:", e)
+        return None, None
