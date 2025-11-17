@@ -134,3 +134,21 @@ def select_kbest_mutual_info(X, y, k=30, random_state=42):
     scores = pd.Series(sel.scores_, index=X.columns).sort_values(ascending=False)
     selected = X.columns[sel.get_support()].tolist()
     return sel, scores, selected
+
+def select_from_tree(X, y, threshold='median', random_state=42, n_estimators=200):
+    """
+    Use a RandomForest to compute feature importances, then select features above threshold.
+    threshold can be float (importance threshold) or 'median'/'mean' string.
+    """
+    rf = RandomForestClassifier(n_estimators=n_estimators, random_state=random_state, n_jobs=-1)
+    rf.fit(X.fillna(0), y)
+    importances = pd.Series(rf.feature_importances_, index=X.columns).sort_values(ascending=False)
+    if threshold == 'median':
+        th = importances.median()
+    elif threshold == 'mean':
+        th = importances.mean()
+    else:
+        th = float(threshold)
+    selected = importances[importances >= th].index.tolist()
+    selector = SelectFromModel(rf, threshold=th, prefit=True)
+    return selector, importances, selected
