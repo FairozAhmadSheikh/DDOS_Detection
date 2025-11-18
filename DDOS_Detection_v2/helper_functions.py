@@ -195,3 +195,6 @@ def compute_multiclass_auc(y_true, y_proba, average='macro'):
 
 def save_model(model, path):
     joblib.dump(model, path)
+    
+def load_model(path):
+    return joblib.load(path)
