@@ -192,3 +192,6 @@ def compute_multiclass_auc(y_true, y_proba, average='macro'):
     except Exception as e:
         print("Could not compute multiclass AUC:", e)
         return None, None
+
+def save_model(model, path):
+    joblib.dump(model, path)
