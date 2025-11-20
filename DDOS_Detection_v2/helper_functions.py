@@ -198,3 +198,39 @@ def save_model(model, path):
     
 def load_model(path):
     return joblib.load(path)
+
+
+def load_dataset(filepath, chunksize=50000):
+    chunks = []
+    for chunk in pd.read_csv(filepath, chunksize=chunksize):
+        chunks.append(chunk)
+    return pd.concat(chunks, axis=0)
+
+def preprocess_dataframe(df):
+    df.replace([np.inf, -np.inf], np.nan, inplace=True)
+    df.dropna(axis=1, thresh=len(df)*0.6, inplace=True)
+    df.fillna(0, inplace=True)
+    if 'Label' in df.columns:
+        df['Label'] = df['Label'].astype('category').cat.codes
+    return df
+
+def plot_class_distribution(labels):
+    plt.figure(figsize=(10,4))
+    sns.countplot(x=labels)
+    plt.title("Class Distribution")
+    plt.show()
+
+def plot_confusion_matrix(y_true, y_pred):
+    cm = confusion_matrix(y_true, y_pred)
+    plt.figure(figsize=(7,5))
+    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
+    plt.title("Confusion Matrix")
+    plt.xlabel("Predicted")
+    plt.ylabel("Actual")
+    plt.show()
+
+def evaluate_model(model, X_test, y_test):
+    preds = model.predict(X_test)
+    print("Accuracy:", accuracy_score(y_test, preds))
+    print(classification_report(y_test, preds))
+    plot_confusion_matrix(y_test, preds)
